@@ -1,15 +1,38 @@
-# /node_modules
-# /public/hot
-# /public/storage
-# /storage/*.key
-# /vendor
-.env
-# .env.backup
-# .phpunit.result.cache
-# docker-compose.override.yml
-# Homestead.json
-# Homestead.yaml
-# npm-debug.log
-# yarn-error.log
-# /.idea
-# /.vscode
+// System / Log files 
+*.DS_Store
+*.log
+
+// Archives
+*.zip
+
+// Sass Cache
+.sass-cache
+
+// Project files
+.idea
+nbproject
+nbproject/private
+.vscode/
+.vs/
+
+// Node / Bower
+node_modules/
+bower_components/
+
+// Plugins
+/plugins/*/*.md
+/plugins/*/*.html
+/plugins/*/package.json
+
+
+// Docs
+Gemfile.lock
+docs/_site
+docs_html/
+.jekyll-cache/
+.jekyll-metadata
+
+// ETC
+TODO
+test.html
+ad.js
