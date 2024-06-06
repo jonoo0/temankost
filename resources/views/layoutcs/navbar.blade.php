@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto py-0">
             <a href="{{url('/')}}" class="nav-item nav-link  {{ uriaktif() }}">Home</a>
-            <a href="{{url('cs/kost')}}" class="nav-item nav-link  {{ uriaktif('cs') }}">Cari KOst</a>
+            <a href="{{url('cs/kost')}}" class="nav-item nav-link  {{ uriaktif('cs') }}">Cari Kost</a>
             @if (Auth::check() == true)
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle  {{ uriaktif('akun') }} "  data-bs-toggle="dropdown">Info Akun & Kost</a>
