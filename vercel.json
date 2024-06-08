@@ -6,6 +6,56 @@
     },
     "routes": [
         {
+            "src": "/build/(.*)",
+            "dest": "public/build/"
+
+        },
+        {
+            "src": "/css/(.*)",
+            "dest": "public/css/"
+
+        },
+        {
+            "src": "/customer/(.*)",
+            "dest": "public/customer/"
+
+        },
+        {
+            "src": "/dist/(.*)",
+            "dest": "public/dist/"
+
+        },
+        {
+            "src": "/fe/(.*)",
+            "dest": "public/fe/"
+
+        },
+        {
+            "src": "/image-uploader-master/(.*)",
+            "dest": "public/image-uploader-master/"
+
+        },
+        {
+            "src": "/nota/(.*)",
+            "dest": "public/nota/"
+
+        },
+        {
+            "src": "/pages/(.*)",
+            "dest": "public/pages/"
+
+        },
+        {
+            "src": "/plugins/(.*)",
+            "dest": "public/plugins/"
+
+        },
+        {
+            "src": "/uploads/(.*)",
+            "dest": "public/uploads/"
+
+        },
+        {
         "src": "/(.*)",
         "dest": "/api/index.php"
         }
