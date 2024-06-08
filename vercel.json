@@ -6,16 +6,6 @@
     },
     "routes": [
         {
-            "src": "/uploads/(.*)",
-            "dest": "/public/uploads"
-
-        },
-        {
-            "src": "/fe/(.*)",
-            "dest": "/public/fe"
-
-        },
-        {
         "src": "/(.*)",
         "dest": "/api/index.php"
         }
