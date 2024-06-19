@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:4306
--- Generation Time: Apr 07, 2023 at 10:01 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 7.4.1
+-- Host: localhost
+-- Generation Time: Jun 19, 2024 at 01:39 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,11 +29,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `failed_jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -46,7 +46,7 @@ CREATE TABLE `failed_jobs` (
 CREATE TABLE `gambars` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `id_kost` bigint(20) NOT NULL,
-  `file` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -75,7 +75,7 @@ INSERT INTO `gambars` (`id`, `id_kost`, `file`, `created_at`, `updated_at`) VALU
 
 CREATE TABLE `jenis_kost` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `jenis` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jenis` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -100,15 +100,15 @@ CREATE TABLE `kost` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `id_pemilik` bigint(20) NOT NULL,
   `jenis_kost_id` bigint(20) NOT NULL,
-  `nama_kost` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_kost` varchar(255) NOT NULL,
   `jumlah_kamar` int(11) NOT NULL,
-  `fasilitas_kost` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `keterangan` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `luas` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lokasi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lat` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `long` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `alamat` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fasilitas_kost` text NOT NULL,
+  `keterangan` text NOT NULL,
+  `luas` varchar(255) NOT NULL,
+  `lokasi` varchar(255) NOT NULL,
+  `lat` varchar(255) NOT NULL,
+  `long` varchar(255) NOT NULL,
+  `alamat` varchar(255) DEFAULT NULL,
   `tarif_perbulan` bigint(20) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -121,7 +121,7 @@ CREATE TABLE `kost` (
 INSERT INTO `kost` (`id`, `id_pemilik`, `jenis_kost_id`, `nama_kost`, `jumlah_kamar`, `fasilitas_kost`, `keterangan`, `luas`, `lokasi`, `lat`, `long`, `alamat`, `tarif_perbulan`, `created_at`, `updated_at`) VALUES
 (1, 1, 2, 'Kost Karunia', 4, '<ul><li>Ada 2 kamar mandi</li><li>Ruang Dapur</li><li>Ruang Tamu</li><li>Jemuran pakaian</li><li>Parkir motor terlindung</li></ul>', '<ul><li>Lokasi istimewa:</li><li>Warung makan 2 meter</li><li>Masjid 10 meter</li><li>Gardena 50 meter</li><li>Indomaret 2 menit</li></ul><p>&nbsp;</p>', '4x4', '-7.783239507216701, 110.38381879453736', '-7.783239507216701', '110.38381879453736', NULL, 400000, '2023-04-07 00:03:01', '2023-04-07 00:34:14'),
 (2, 1, 2, 'Kost Sakura', 4, '<ul><li>Halaman parkir luas</li><li>Free Wifi</li><li>Dapur bersama</li><li>Kompor gas dan alat masak tinggal pakai</li><li>Kasur, bantal + guling, kipas</li><li>Bebas jam malam</li><li>Bawa kucing boleh (asal bersih)</li></ul>', '<ul><li>Kost 2 lantai&nbsp;</li><li>Kamar kosongan ada&nbsp;</li><li>Kamar isian ada&nbsp;</li><li>Toilet Luar, Dalam ada&nbsp;</li><li>*Lokasi kost strategis, ke jalan raya cuma 50 meteran</li></ul>', '4x4', '-7.769190654232467, 110.42762046825953', '-7.769190654232467', '110.42762046825953', NULL, 300000, '2023-04-07 00:44:13', '2023-04-07 00:44:13'),
-(3, 2, 1, 'Kost Arjuna', 2, '<ul><li>Free air</li><li>Dapur bersama</li><li>Wifi</li></ul>', '<ul><li>Pinggir sawah</li><li>View pagi merapi, view sunset</li><li>Ada parir mobil, motor didalam</li><li>Bebas jam malam</li></ul>', '4x4', '-7.7901199081228745, 110.3006945109331', '-7.7901199081228745', '110.3006945109331', NULL, 450000, '2023-04-07 00:59:55', '2023-04-07 00:59:55');
+(3, 2, 1, 'Kost Arjuna', 1, '<ul><li>Free air</li><li>Dapur bersama</li><li>Wifi</li></ul>', '<ul><li>Pinggir sawah</li><li>View pagi merapi, view sunset</li><li>Ada parir mobil, motor didalam</li><li>Bebas jam malam</li></ul>', '4x4', '-7.7901199081228745, 110.3006945109331', '-7.7901199081228745', '110.3006945109331', NULL, 450000, '2023-04-07 00:59:55', '2023-04-07 21:46:30');
 
 -- --------------------------------------------------------
 
@@ -131,7 +131,7 @@ INSERT INTO `kost` (`id`, `id_pemilik`, `jenis_kost_id`, `nama_kost`, `jumlah_ka
 
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -158,8 +158,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -172,9 +172,9 @@ CREATE TABLE `password_resets` (
 CREATE TABLE `pemilik` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) NOT NULL,
-  `no_tlp` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `no_rek` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `alamat` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `no_tlp` varchar(255) NOT NULL,
+  `no_rek` varchar(255) NOT NULL,
+  `alamat` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -196,8 +196,8 @@ INSERT INTO `pemilik` (`id`, `user_id`, `no_tlp`, `no_rek`, `alamat`, `created_a
 CREATE TABLE `penghuni` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) NOT NULL,
-  `no_tlp` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `alamat` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `no_tlp` varchar(255) NOT NULL,
+  `alamat` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -218,11 +218,11 @@ INSERT INTO `penghuni` (`id`, `user_id`, `no_tlp`, `alamat`, `created_at`, `upda
 
 CREATE TABLE `personal_access_tokens` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) NOT NULL,
   `tokenable_id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -238,18 +238,25 @@ CREATE TABLE `pesanan` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `id_penghuni` bigint(20) NOT NULL,
   `id_kost` bigint(20) NOT NULL,
-  `kode_trx` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `kode_trx` varchar(255) NOT NULL,
   `tgl_mulai` datetime NOT NULL,
   `tgl_selesai` datetime NOT NULL,
   `jml_bulan` bigint(20) NOT NULL,
   `nominal` bigint(20) NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `via_bayar` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `snap_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `bukti_bayar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) NOT NULL,
+  `via_bayar` varchar(255) NOT NULL,
+  `snap_token` varchar(255) DEFAULT NULL,
+  `bukti_bayar` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pesanan`
+--
+
+INSERT INTO `pesanan` (`id`, `id_penghuni`, `id_kost`, `kode_trx`, `tgl_mulai`, `tgl_selesai`, `jml_bulan`, `nominal`, `status`, `via_bayar`, `snap_token`, `bukti_bayar`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, 'TR-003-0001', '2023-04-08 00:00:00', '2023-05-08 00:00:00', 1, 450000, 'paid', 'midtrans', '00a0d620-ba4a-4f7c-9c3c-6d239c0651ed', NULL, '2023-04-07 21:36:40', '2023-04-07 21:46:30');
 
 -- --------------------------------------------------------
 
@@ -259,13 +266,13 @@ CREATE TABLE `pesanan` (
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `role` enum('Admin','Pemilik','Penghuni') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `role` enum('Admin','Pemilik','Penghuni') NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -411,7 +418,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
