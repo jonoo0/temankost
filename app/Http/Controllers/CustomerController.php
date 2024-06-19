@@ -32,19 +32,20 @@ class CustomerController extends Controller
 
         $data =  Kost::join('pemilik as b', 'b.id', 'kost.id_pemilik')
             ->join('users as c', 'c.id', 'b.user_id')
-            ->select('kost.*', 'b.no_tlp', 'c.email')
+            ->select('kost.*', 'b.no_tlp', 'c.email', 'c.name', 'b.alamat')
             ->where('kost.id', $id)
             ->with('pesanan')
             ->first();
-
-
-        $pemilik = Pemilik::findOrfail($data->id_pemilik);
-        $dekat = '';
-        foreach ($data->pesanan->take(1) as $val) {
-            $dekat = $val->tgl_selesai;
-        }
-
-        // dd($dekat);
+            
+            
+            $pemilik = Pemilik::findOrfail($data->id_pemilik);
+            $dekat = '';
+            foreach ($data->pesanan->take(1) as $val) {
+                $dekat = $val->tgl_selesai;
+            }
+            
+            // dd($dekat);
+            // dd($pemilik);
 
         return view('customer.kost.detail', compact('data', 'dekat', 'pemilik'));
     }

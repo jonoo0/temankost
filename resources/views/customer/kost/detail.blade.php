@@ -130,7 +130,14 @@
                             <i class="bi bi-geo-alt fs-1 text-primary me-3"></i>
                             <div class="text-start">
                                 <h6 class="text-uppercase mb-1">Alamat</h6>
-                                <span>{{ $pemilik->alamat }}</span>
+                                <span>{{ $data->alamat }}</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-person-fill fs-1 text-primary me-3"></i>
+                            <div class="text-start">
+                                <h6 class="text-uppercase mb-1">Pemilik</h6>
+                                <span>{{ $data->name }}</span>
                             </div>
                         </div>
                         <div class="d-flex align-items-center mb-2">
