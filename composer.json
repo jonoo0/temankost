@@ -17,7 +17,8 @@
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.10",
         "midtrans/midtrans-php": "^2.5",
-        "milon/barcode": "^9.0"
+        "milon/barcode": "^9.0",
+        "opencage/geocode": "^3.3"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label style="color: #6c757d">Nama</label>
-                                        <input type="text" class="form-control" id="nama" name="nama" value="{{$data->user->name}}">
+                                        <input type="text" class="form-control" id="nama" name="nama" value="{{$data->name}}">
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group  col-md-6">
@@ -85,7 +85,7 @@
                                     <div class="form-group">
                                         <label style="color: #6c757d">Email</label>
                                         <input type="email" class="form-control" id="email"
-                                            name="email" value="{{$data->user->email}}">
+                                            name="email" value="{{$data->email}}">
                                     </div>
                                     <div class="form-group">
                                         <label style="color: #6c757d">Alamat</label>

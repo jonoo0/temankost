@@ -98,24 +98,11 @@ class AuthController extends Controller
             $data->role = $request->role;
             $data->email = $request->email;
             $data->password = bcrypt($request->password);
+            $data->no_tlp = $request->no_tlp;
+            $data->no_rek = $request->rekening;
+            $data->alamat = $request->alamat;
             $data->save();
-
-            if ($data->role == 'Pemilik') {
-                $pemilik = new Pemilik();
-                $pemilik->user_id = $data->id;
-                $pemilik->no_tlp = $request->no_tlp;
-                $pemilik->no_rek = $request->rekening;
-                $pemilik->alamat = $request->alamat;
-                $pemilik->save();
-            }
-            if ($data->role == 'Penghuni') {
-                $penghuni = new Penghuni();
-                $penghuni->user_id = $data->id;
-                $penghuni->no_tlp = $request->no_tlp;
-                $penghuni->alamat = $request->alamat;
-                $penghuni->save();
-            }
-
+            
             return redirect()->route('login')
                 ->with(['t' =>  'success', 'm' => 'Registrasi Sukses']);
         }

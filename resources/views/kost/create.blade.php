@@ -78,14 +78,14 @@
                                             style="width: 100%" name="pemilik_id">
                                             <option value="">Pilih Pemilik</option>
                                             @foreach ($user as $b)
-                                                <option value={{ $b->id_pemilik }}>{{ $b->name }}</option>
+                                                <option value={{ $b->id }}>{{ $b->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     @endif
                                     @if (Auth::user()->role == 'Pemilik')
                                     @php
-                                        $pemilik = App\Models\Pemilik::where('user_id', Auth::user()->id)->first();
+                                        $pemilik = App\Models\User::where('id', Auth::user()->id)->first();
                                     @endphp
                                     <div class="form-group" style="display:none">
                                         <label style="color: #6c757d">Pemilik Kost</label>

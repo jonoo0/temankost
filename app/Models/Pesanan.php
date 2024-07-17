@@ -28,6 +28,9 @@ class Pesanan extends Model
     public function kost(){
         return $this->belongsTo(Kost::class, 'id_kost');
     }
+    public function penghuni(){
+        return $this->belongsTo(User::class, 'id_penghuni');
+    }
     public function jenis(){
         return $this->belongsTo(JenisKost::class, 'jenis_kost_id');
     }

@@ -38,7 +38,7 @@ class Kost extends Model
     }
 
     public function pemilik(){
-        return $this->belongsTo(Pemilik::class, 'id_pemilik');
+        return $this->belongsTo(User::class, 'id_pemilik');
     }
 
     public function scopeDistance($query, $latitude, $longitude, $distance, $unit = "km")

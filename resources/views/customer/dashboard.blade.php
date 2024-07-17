@@ -12,7 +12,7 @@
             <div class="col-lg-8 text-center text-lg-start">
                 <h1 class="display-1 text-uppercase text-dark mb-lg-4">TEMAN KOST</h1>
                 <h1 class="text-uppercase text-white mb-lg-4">Temukan Kost Nyaman Disini</h1>
-                <p class="fs-4 text-white mb-lg-4">Bisa langsung mengajukan sewa kos di website PapiKost.Transaksi lebih aman, tanpa takut kamarnya penuh keduluan orang lain. </p>
+                <p class="fs-4 text-white mb-lg-4">Bisa langsung mengajukan sewa kos di website TemanKost.Transaksi lebih aman, tanpa takut kamarnya penuh keduluan orang lain. </p>
             </div>
         </div>
     </div>

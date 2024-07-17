@@ -13,34 +13,9 @@ class PenghuniController extends Controller
 {
     public function index()
     {
-
-
-        $penghuni = Penghuni::orderBy('id', 'desc');
-
-        $id_pemilik = Pemilik::join('users as a', 'a.id', 'pemilik.user_id')
-        ->select('pemilik.id')
-        ->where('a.id',Auth::user()->id)->first();
-
-        // $penghuni = Penghuni::
-        // join('users as a', 'a.id', 'penghuni.user_id')
-        // ->join('pesanan as b', 'b.id_penghuni', 'penghuni.id')
-        //     ->join('kost as c', 'c.id', 'b.id_kost')
-
-        //     ->where('status', 'paid')
-        //     ->select([
-        //     'penghuni.*',
-        //     'a.name',
-        //     'a.email',
-        //     'c.nama_kost',
-        //     'b.tgl_mulai'
-        //     ])
-
-        // ->where('a.role', 'penghuni')
-        // ->orderBy('a.id', 'desc');
-
+        $penghuni = User::orderBy('id', 'desc')->where('role','Penghuni');
         if(Auth::user()->role == 'Admin') $data = $penghuni->get();
-        // if(Auth::user()->role == 'Pemilik')$data = $penghuni ->where('c.id_pemilik',$id_pemilik->id )->get();
-
+        if(Auth::user()->role == 'Pemilik') $data = $penghuni->get();
         return view('penghuni.index', compact('data'));
     }
 
@@ -56,32 +31,27 @@ class PenghuniController extends Controller
         $data->role = 'Penghuni';
         $data->email = $request->email;
         $data->password = bcrypt('password');
+        $data->no_tlp = $request->no_tlp;
+        $data->alamat = $request->alamat;
         $data->save();
-
-        $penghuni = new Penghuni();
-        $penghuni->user_id = $data->id;
-        $penghuni->no_tlp = $request->no_tlp;
-        $penghuni->alamat = $request->alamat;
-        $penghuni->save();
         return redirect()->route('penghuni.index')
         ->with(['t' =>  'success', 'm'=> 'Data berhasil ditambah']);
     }
 
     public function edit(Request $request, $id)
     {
-        $data = Penghuni::where('id',$id)->first();
+        $data = User::findOrFail($id);
         return view('penghuni.edit', compact('data'));
     }
 
     public function update(Request $request, $id)
     {
 
-        $data = Penghuni::where('id',$id)->first();
+        $data = User::findOrFail($id);
         $data->update([
                 'no_tlp' => $request->get('no_tlp'),
                 'alamat' => $request->get('alamat'),
             ]);
-
             if($request->password){
                 User::where('id', $data->user_id)->update([
                        'email' => $request->get('email'),
@@ -95,6 +65,7 @@ class PenghuniController extends Controller
                    ]);
             }
 
+            // dd($data);
 
         return redirect()->route('penghuni.index')
         ->with(['t' =>  'success', 'm'=> 'Data berhasil diupdate']);
@@ -102,7 +73,7 @@ class PenghuniController extends Controller
 
     public function destroy(Request $request)
     {
-        $data = Penghuni::findorFail($request->id);
+        $data = User::findorFail($request->id);
         $data->delete();
         return redirect()->route('penghuni.index')
         ->with(['t' =>  'success', 'm'=> 'Data berhasil dihapus']);

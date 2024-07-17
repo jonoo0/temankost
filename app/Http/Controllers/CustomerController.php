@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Kost;
 use App\Models\JenisKost;
 use App\Models\Pemilik;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
@@ -30,23 +31,21 @@ class CustomerController extends Controller
     function show($id)
     {
 
-        $data =  Kost::join('pemilik as b', 'b.id', 'kost.id_pemilik')
-            ->join('users as c', 'c.id', 'b.user_id')
-            ->select('kost.*', 'b.no_tlp', 'c.email', 'c.name', 'b.alamat')
-            ->where('kost.id', $id)
-            ->with('pesanan')
-            ->first();
-            
-            
-            $pemilik = Pemilik::findOrfail($data->id_pemilik);
-            $dekat = '';
-            foreach ($data->pesanan->take(1) as $val) {
-                $dekat = $val->tgl_selesai;
-            }
-            
-            // dd($dekat);
-            // dd($pemilik);
+        $data =  Kost::find($id);
+        $pemilik = User::findOrfail($data->id_pemilik);
+        $dekat = '';
+        foreach ($data->pesanan->take(1) as $val) {
+            $dekat = $val->tgl_selesai;
+        }
 
-        return view('customer.kost.detail', compact('data', 'dekat', 'pemilik'));
+        $geocoder = new \OpenCage\Geocoder\Geocoder(env('GEOCODE_CLIENT_KEY'));
+        $result = $geocoder->geocode($data->lokasi);
+        $final_lokasi = $result['results'][0]['formatted'];
+
+        // dd($final_lokasi);
+        // dd($dekat);
+        // dd($data->lokasi);
+
+        return view('customer.kost.detail', compact('data', 'dekat', 'pemilik', 'final_lokasi'));
     }
 }

@@ -53,8 +53,8 @@
                                             <tr>
                                                 <td>{{ $x++ }}</td>
                                                 <td>{{ 'PHU-00'.$dt->id}}</td>
-                                                <td>{{ $dt->user->name ?? ''}}</td>
-                                                <td>{{ $dt->user->email ?? '' }}</td>
+                                                <td>{{ $dt->name ?? ''}}</td>
+                                                <td>{{ $dt->email ?? '' }}</td>
                                                 <td>{{ $dt->alamat }}</td>
                                                 <td>{{ $dt->no_tlp }}</td>
                                                 {{-- <td>{{ $dt->nama_kost }}</td>

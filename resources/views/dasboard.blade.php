@@ -136,8 +136,8 @@
                                                 <td><a
                                                         href="{{ url('pesanan?dtl='. $dt->id) }}">{{ $dt->kode_trx }}</a>
                                                 </td>
-                                                <td>{{$dt->nama_penghuni}}</td>
-                                                <td>{{$dt->no_tlp}}</td>
+                                                <td>{{$dt->penghuni->name}}</td>
+                                                <td>{{$dt->penghuni->no_tlp}}</td>
                                                 <td>{{$dt->status}}</td>
                                             </tr>
                                         @endforeach

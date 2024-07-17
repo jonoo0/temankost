@@ -105,13 +105,11 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-12" style="display: none">
                                 <label for="exampleFormControlSelect1"></label>
                                 <select class="form-control bg-light border-0 px-4" name="via_bayar"
                                     id="via_bayar" style="height: 55px;" required>
-                                    <option value="" selected>Pilih Methode Pembayaran </option>
-                                    <option value="tf-manual">Tranfer Manual </option>
-                                    <option value="midtrans">Pembayaran Otomatis</option>
+                                    <option value="midtrans" selected>Pembayaran Otomatis </option>
                                 </select>
                             </div>
                             <div class="col-12">
@@ -129,22 +127,15 @@
                         <div class="d-flex align-items-center mb-2">
                             <i class="bi bi-geo-alt fs-1 text-primary me-3"></i>
                             <div class="text-start">
-                                <h6 class="text-uppercase mb-1">Alamat</h6>
-                                <span>{{ $data->alamat }}</span>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-2">
-                            <i class="bi bi-person-fill fs-1 text-primary me-3"></i>
-                            <div class="text-start">
-                                <h6 class="text-uppercase mb-1">Pemilik</h6>
-                                <span>{{ $data->name }}</span>
+                                <h6 class="text-uppercase mb-1">Alamat Kost</h6>
+                                <span>{{ $final_lokasi ?? $pemilik->alamat }}</span>
                             </div>
                         </div>
                         <div class="d-flex align-items-center mb-2">
                             <i class="bi bi-envelope-open fs-1 text-primary me-3"></i>
                             <div class="text-start">
                                 <h6 class="text-uppercase mb-1">Email Us</h6>
-                                <span>{{ $data->email }}</span>
+                                <span>{{ $pemilik->email }}</span>
                             </div>
                         </div>
                         <div class="d-flex align-items-center mb-4">

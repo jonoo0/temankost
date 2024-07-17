@@ -45,9 +45,9 @@
                                             <tr>
                                                 <td>{{ $x++ }}</td>
                                                 <td>{{ $dt->kode_trx}}</td>
-                                                <td>{{ $dt->name }}</td>
-                                                <td>{{ $dt->email }}</td>
-                                                <td>{{ $dt->no_tlp }}</td>
+                                                <td>{{ $dt->penghuni->name }}</td>
+                                                <td>{{ $dt->penghuni->email }}</td>
+                                                <td>{{ $dt->penghuni->no_tlp }}</td>
                                                 <td>{{ tgls($dt->tgl_mulai) }} - {{tgls($dt->tgl_selesai)}}</td>
                                                 @php
 

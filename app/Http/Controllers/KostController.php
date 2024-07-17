@@ -17,49 +17,44 @@ class KostController extends Controller
 {
 
     public function coordinate(Request $request)
-{
+    {
 
-    $lat = '-7.817781893677779';
-    $lng = '110.4078435106305';
+        $lat = '-7.817781893677779';
+        $lng = '110.4078435106305';
 
-    if( !empty($request->latitude) ){
-        $lat=$request->latitude;
+        if (!empty($request->latitude)) {
+            $lat = $request->latitude;
+        }
+
+        if (!empty($request->longitude)) {
+            $lng = $request->longitude;
+        }
+
+        return $lat . ', ' . $lng;
     }
-
-    if( !empty($request->longitude) ){
-        $lng=$request->longitude;
-    }
-
-    return $lat.', '.$lng;
-}
-
-
-
-
 
     public function index()
     {
 
         $idd = Auth::user()->id;
-        $cek_pemilik =  DB::table('users as a')->select('a.*', 'b.id as id_pemilik')->join('pemilik as b', 'a.id', 'b.user_id')->where(['a.id' => $idd])->first();
+        $cek_pemilik = User::find($idd);
         $data = Kost::orderBy('id', 'desc');
 
-        if(Auth::user()->role == 'Admin') $data = $data->get();
-        if(Auth::user()->role == 'Pemilik') $data = $data->where(['id_pemilik' => $cek_pemilik->id_pemilik])->get();
+        if (Auth::user()->role == 'Admin') $data = $data->get();
+        if (Auth::user()->role == 'Pemilik') $data = $data->where(['id_pemilik' => $cek_pemilik->id])->get();
         return view('kost.index', compact('data'));
     }
 
     public function create()
     {
         $jenis = JenisKost::all();
-        $user = DB::table('users as a')->select('a.*', 'b.id as id_pemilik')->join('pemilik as b', 'a.id', 'b.user_id')->where('role', 'Pemilik')->get();
-
+        $user = User::where('role', 'Pemilik')->get();
         return view('kost.create', compact('jenis', 'user'));
     }
 
     public function store(Request $request)
     {
-        $cek = (explode(", ",$request->lokasi));
+        $cek = (explode(", ", $request->lokasi));
         $data = new Kost();
         $data->nama_kost = $request->nama_kost;
         $data->jenis_kost_id = $request->jenis_kost_id;
@@ -72,40 +67,30 @@ class KostController extends Controller
         $data->lokasi = $request->lokasi;
         $data->lat = $cek[0];
         $data->long = $cek[1];
+
+        // dd($data);
         $data->save();
-            $image = array();
-            if ($file = $request->file('file')) {
-                $jum = count($request->file('file'));
-                foreach ($file as $f) {
-                    $image_name = md5(rand(1000, 10000));
-                    $ext = strtolower($f->getClientOriginalExtension());
-                    $image_full_name = $image_name . '.' . $ext;
-                    $uploade_path = 'uploads/images/';
-                    $image_url = $uploade_path . $image_full_name;
-                    $f->move($uploade_path, $image_full_name);
-                    $image[] = $image_url;
-                }
-                for ($i = 0; $i < $jum; $i++) {
-                    Gambar::create([
-                            'id_kost' => $data->id,
-                            'file' => $image[$i]
-                        ]);
-                }
+        $image = array();
+        if ($file = $request->file('file')) {
+            $jum = count($request->file('file'));
+            foreach ($file as $f) {
+                $image_name = md5(rand(1000, 10000));
+                $ext = strtolower($f->getClientOriginalExtension());
+                $image_full_name = $image_name . '.' . $ext;
+                $uploade_path = 'uploads/images/';
+                $image_url = $uploade_path . $image_full_name;
+                $f->move($uploade_path, $image_full_name);
+                $image[] = $image_url;
             }
-
-
-            // for ($i=1; $i <= $request->jumlah_kamar; $i++) {
-            //     Kamar::create([
-            //         'nama' => 'Kamar ' .$i,
-            //         'kost_id' => $data->id,
-            //         'sts' => 0,
-            //     ]);
-            // }
-
-
-
+            for ($i = 0; $i < $jum; $i++) {
+                Gambar::create([
+                    'id_kost' => $data->id,
+                    'file' => $image[$i]
+                ]);
+            }
+        }
         return redirect()->route('kost.index')
-        ->with(['t' =>  'success', 'm'=> 'Data berhasil ditambah']);
+            ->with(['t' =>  'success', 'm' => 'Data berhasil ditambah']);
     }
 
     public function show(Kost $kost)
@@ -118,17 +103,31 @@ class KostController extends Controller
 
     public function detail_penghuni(Kost $kost)
     {
-        $data = Pesanan::
-        join('penghuni as a', 'pesanan.id_penghuni', 'a.id')
-        ->join('users as b', 'a.user_id', 'b.id')
-        ->join('kost as c', 'pesanan.id_kost', 'c.id')
-        ->select(['pesanan.*', 'b.name', 'b.email', 'a.no_tlp', 'c.nama_kost'])
-        ->where([
-            'id_kost' => $kost->id,
-            'pesanan.status' => 'paid',
-        ])->get();
+        // $data = Pesanan::join('penghuni as a', 'pesanan.id_penghuni', 'a.id')
+        //     ->join('users as b', 'a.user_id', 'b.id')
+        //     ->join('kost as c', 'pesanan.id_kost', 'c.id')
+        //     ->select(['pesanan.*', 'b.name', 'b.email', 'a.no_tlp', 'c.nama_kost'])
+        //     ->where([
+        //         'id_kost' => $kost->id,
+        //         'pesanan.status' => 'paid',
+        //     ])->get();
 
+        // // dd($data);
+        // $data = Kost::
+        // where('id', $kost->id)->
+        // with('pesanan')->
+        // whereHas('pesanan', function($query) {
+        //     $query->where('status', 'paid');
+        // })
+        // ->get();
         // dd($data);
+
+        $data = Pesanan::where([
+        'status'=> 'paid',
+        'id_kost'=> $kost->id,
+        ])->get();
+        // dd($data);
+
         return view('kost.detail_penghuni', compact('data'));
     }
 
@@ -136,66 +135,66 @@ class KostController extends Controller
     public function edit(Request $request, $id)
     {
         $jenis = JenisKost::all();
-        $user = DB::table('users as a')->select('a.*', 'b.id as id_pemilik')->join('pemilik as b', 'a.id', 'b.user_id')->where('role', 'Pemilik')->get();
-        $data = Kost::where('id',$id)->first();
-        return view('kost.edit', compact('data','jenis', 'user'));
+        $user = User::where('role', 'Pemilik')->get();
+        $data = Kost::where('id', $id)->first();
+        return view('kost.edit', compact('data', 'jenis', 'user'));
     }
 
     public function update(Request $request, $id)
     {
 
 
-    $preload = $request->preloaded;
-    // dd($preload);
-        if($preload !=null){
+        $preload = $request->preloaded;
+        // dd($preload);
+        if ($preload != null) {
             $images = Gambar::where('id_kost', $id)
-            -> whereNotIn('file', $preload)->delete();
-        }elseif($preload == null){
+                ->whereNotIn('file', $preload)->delete();
+        } elseif ($preload == null) {
             Gambar::where('id_kost', $id)->delete();
         }
         $variasi = $request['id_variasi'];
-        if($variasi != null){
-            $a =json_encode($variasi);
-        }else{
+        if ($variasi != null) {
+            $a = json_encode($variasi);
+        } else {
             $a = NULL;
         }
 
-        $data = Kost::where('id',$id)->first();
+        $data = Kost::where('id', $id)->first();
         $updt = $data->update([
-                'nama_kost' => $request->get('nama_kost'),
-                'jenis_kost_id' => $request->get('jenis_kost_id'),
-                'jumlah_kamar' => $request->get('jumlah_kamar'),
-                'luas' => $request->get('luas'),
-                'tarif_perbulan' => $request->get('tarif_perbulan'),
-                'fasilitas_kost' => $request->get('fasilitas_kost'),
-                'keterangan' => $request->get('keterangan'),
-                'lokasi' => $request->get('lokasi'),
+            'nama_kost' => $request->get('nama_kost'),
+            'jenis_kost_id' => $request->get('jenis_kost_id'),
+            'jumlah_kamar' => $request->get('jumlah_kamar'),
+            'luas' => $request->get('luas'),
+            'tarif_perbulan' => $request->get('tarif_perbulan'),
+            'fasilitas_kost' => $request->get('fasilitas_kost'),
+            'keterangan' => $request->get('keterangan'),
+            'lokasi' => $request->get('lokasi'),
 
-            ]);
+        ]);
 
-            // dd($data->id);
-            $image = array();
-            if ($file = $request->file('file')) {
-                $jum = count($request->file('file'));
-                foreach ($file as $f) {
-                    $image_name = md5(rand(1000, 10000));
-                    $ext = strtolower($f->getClientOriginalExtension());
-                    $image_full_name = $image_name . '.' . $ext;
-                    $uploade_path = 'uploads/images/';
-                    $image_url = $uploade_path . $image_full_name;
-                    $f->move($uploade_path, $image_full_name);
-                    $image[] = $image_url;
-                }
-
-                for ($i = 0; $i < $jum; $i++) {
-                    Gambar::create([
-                            'id_kost' => $data->id,
-                            'file' => $image[$i]
-                        ]);
-                }
+        // dd($data->id);
+        $image = array();
+        if ($file = $request->file('file')) {
+            $jum = count($request->file('file'));
+            foreach ($file as $f) {
+                $image_name = md5(rand(1000, 10000));
+                $ext = strtolower($f->getClientOriginalExtension());
+                $image_full_name = $image_name . '.' . $ext;
+                $uploade_path = 'uploads/images/';
+                $image_url = $uploade_path . $image_full_name;
+                $f->move($uploade_path, $image_full_name);
+                $image[] = $image_url;
             }
+
+            for ($i = 0; $i < $jum; $i++) {
+                Gambar::create([
+                    'id_kost' => $data->id,
+                    'file' => $image[$i]
+                ]);
+            }
+        }
         return redirect()->route('kost.index')
-        ->with(['t' =>  'success', 'm'=> 'Data berhasil diupdate']);
+            ->with(['t' =>  'success', 'm' => 'Data berhasil diupdate']);
     }
 
     public function destroy(Request $request)
@@ -206,6 +205,6 @@ class KostController extends Controller
 
 
         return redirect()->route('kost.index')
-        ->with(['t' =>  'success', 'm'=> 'Data berhasil dihapus']);
+            ->with(['t' =>  'success', 'm' => 'Data berhasil dihapus']);
     }
 }

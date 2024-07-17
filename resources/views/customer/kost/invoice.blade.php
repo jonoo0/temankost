@@ -30,7 +30,7 @@
                                 </tr>
                                 <tr>
                                     <td>Alamat</td>
-                                    <td>:  {{ $data->kost->pemilik->alamat }} </td>
+                                    <td>:  {{ $final_lokasi ?? $data->kost->pemilik->alamat }} </td>
                                 </tr>
                                 <tr>
                                     <td>Tgl Masuk</td>

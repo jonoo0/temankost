@@ -26,19 +26,19 @@
                         </a>
                     </li>
 
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ url('/pesanan?via=tf-manual') }}" class="nav-link">
                             <i class="fas fa-download"></i>
                             <p>
                                 &nbsp;&nbsp; Pembayaran Manual
                             </p>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a href="{{ url('/pesanan?via=midtrans') }}" class="nav-link">
                             <i class="fas fa-download"></i>
                             <p>
-                                &nbsp;&nbsp; Pembayaran Midtrans
+                                &nbsp;&nbsp; Pembayaran
                             </p>
                         </a>
                     </li>

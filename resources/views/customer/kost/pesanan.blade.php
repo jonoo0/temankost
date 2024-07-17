@@ -14,12 +14,13 @@
             </div>
 
             {{-- @dd($data); --}}
-
             <div class="row g-5">
                 {{-- @dd($data) --}}
                 @foreach ($data as $val)
+                {{-- @dd($val->kost->nama_kost) --}}
                     @php
-                        $wa = str_replace_first('0', '62', $val->kost->pemilik->no_tlp);
+                        // $wa = str_replace_first('0', '62', $val->kost->pemilik->no_tlp);
+                        $wa = convertNoTelp($val->kost->pemilik->no_tlp);
                     @endphp
                     <div class="col-md-6">
                         <div class="service-item bg-light d-flex p-4">
@@ -47,7 +48,7 @@
                                         status <b>Terbayar </b> Sudah dikonfirmasi dari pemilik kost <br> <span><a
                                                 href="{{ '/pesanan/pembayaran?idd=' . $val->id }}">Lihat Detail</a></span>
                                         | <span> <a
-                                                href="{{ 'https://wa.me/' . $wa . '?text=Hallo Admin ' . $val->nama_kost }}">
+                                                href="{{ 'https://wa.me/' . $wa . '?text=Hallo pak/bu'. $val->kost->pemilik->name . ' pemilik' . $val->kost->nama_kost }}">
                                                 Hubungi Pemilik
                                             </a></span> </p>
                                 @endif
@@ -78,7 +79,7 @@
                                                 href="{{ '/pesanan/pembayaran?idd=' . $val->id . '&snap=' . $val->snap_token }}">Lihat
                                                 Detail</a></span> 
                                         | <span> <a
-                                                href="{{ 'https://wa.me/' . $wa . '?text=Hallo Admin ' . $val->nama_kost }}">
+                                                href="{{ 'https://wa.me/' . $wa . '?text=Hallo pak/bu ' . $val->kost->pemilik->name . ' pemilik '. $val->kost->nama_kost }}">
                                                 Hubungi Pemilik
                                             </a></span> </p>
                                 @endif

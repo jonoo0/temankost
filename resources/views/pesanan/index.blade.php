@@ -69,16 +69,18 @@
                                             <tr>
                                                 <td>{{ $x++ }}</td>
                                                 <td>{{ $dt->kode_trx }}</td>
-                                                <td>{{ $dt->nama_kost }}</td>
+                                                <td>{{ $dt->kost->nama_kost }}</td>
+                                                {{-- <td>{{ $dt->penghuni->name }}</td> --}}
 
 
                                                 @php
-                                                    $wa = str_replace_first('0', '62', $dt->no_tlp);
+                                                    // $wa = str_replace_first('0', '62', $dt->penghuni->no_tlp);
+                                                    $wa = convertNoTelp($dt->penghuni->no_tlp);
 
                                                 @endphp
 
-                                        <td> {{ $dt->no_tlp }} </td>
-                                                <td>{{ $dt->email }}</td>
+                                        <td> {{ $dt->penghuni->no_tlp }} </td>
+                                                <td>{{ $dt->penghuni->email }}</td>
                                                 <td>{{ tgls($dt->tgl_mulai) }} - {{ tgls($dt->tgl_selesai) }}
                                                     ({{ $dt->jml_bulan }} bln)
                                                 </td>
@@ -140,12 +142,12 @@
                                                         <td>
                                                             @if ($dt->status == 'paid')
                                                                 <a
-                                                                    href="{{ 'https://wa.me/' . $wa . '?text=Hallo ' . $dt->nama_penghuni . ' pesanan anda dengan kode transaksi ' . $dt->kode_trx . ' statusnya ' . $dt->status . ' Terimakasih sudah memesan. Jangan lupa checkin tepat waktu sesuai tanggal yang kamu tentukan ya. ' }}">
+                                                                    href="{{ 'https://wa.me/' . $wa . '?text=Hallo ' . $dt->penghuni->name . ' pesanan anda dengan kode transaksi ' . $dt->kode_trx . ' statusnya ' . $dt->status . ' Terimakasih sudah memesan. Jangan lupa checkin tepat waktu sesuai tanggal yang kamu tentukan ya. ' }}">
                                                                     Hubungi
                                                                 </a>
                                                             @elseif($dt->status == 'ditolak')
                                                                 <a
-                                                                    href="{{ 'https://wa.me/' . $wa . '?text=Hallo ' . $dt->nama_penghuni . ' Mohon maaf pesanan anda dengan kode transaksi ' . $dt->kode_trx . ' statusnya ' . $dt->status . '' }}">
+                                                                    href="{{ 'https://wa.me/' . $wa . '?text=Hallo ' . $dt->penghuni->name . ' Mohon maaf pesanan anda dengan kode transaksi ' . $dt->kode_trx . ' statusnya ' . $dt->status . '' }}">
                                                                     Hubungi
                                                                 </a>
 
@@ -157,12 +159,12 @@
                                                     <td>
                                                         @if ($dt->status == 'paid' && $dt->via_bayar == 'midtrans')
                                                         <a
-                                                            href="{{ 'https://wa.me/' . $wa . '?text=Hallo ' . $dt->nama_penghuni . ' pesanan anda dengan kode transaksi ' . $dt->kode_trx . ' statusnya ' . $dt->status . ' Terimakasih sudah memesan. Jangan lupa checkin tepat waktu sesuai tanggal yang kamu tentukan ya. ' }}">
+                                                            href="{{ 'https://wa.me/' . $wa . '?text=Hallo ' . $dt->penghuni->name . ' pesanan anda dengan kode transaksi ' . $dt->kode_trx . ' statusnya ' . $dt->status . ' Terimakasih sudah memesan. Jangan lupa checkin tepat waktu sesuai tanggal yang kamu tentukan ya. ' }}">
                                                             Hubungi
                                                         </a>
                                                         @elseif($dt->status == 'pending' && $dt->via_bayar == 'midtrans')
                                                         <a
-                                                            href="{{ 'https://wa.me/' . $wa . '?text=Hallo ' . $dt->nama_penghuni . ' Silahkan segera melakukan pembayaran pada kode transaksi ' . $dt->kode_trx . ' sebelum pesananmu kadaluarsa. Saat ini status pesanan anda ' . $dt->status . '' }}">
+                                                            href="{{ 'https://wa.me/' . $wa . '?text=Hallo ' . $dt->penghuni->name . ' Silahkan segera melakukan pembayaran pada kode transaksi ' . $dt->kode_trx . ' sebelum pesananmu kadaluarsa. Saat ini status pesanan anda ' . $dt->status . '' }}">
                                                             Hubungi
                                                         </a>
                                                         @endif

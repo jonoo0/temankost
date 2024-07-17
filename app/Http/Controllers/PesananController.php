@@ -16,49 +16,39 @@ class PesananController extends Controller
     public function index(Request $req)
     {
 
-        $id_pemilik = Pemilik::where('user_id', Auth::user()->id)->first();
-        $id_penghuni = Penghuni::where('user_id', Auth::user()->id)->first();
-        $pesanan = Pesanan::join('kost as a', 'a.id', 'pesanan.id_kost')
-            ->select(
-                'pesanan.*',
-                'a.nama_kost',
-                'c.no_tlp',
-                'd.email',
-                'd.name as nama_penghuni'
-                // 'e.no_tlp as tlp_pemilik'
-            )
-            ->join('penghuni as c', 'c.id', 'pesanan.id_penghuni')
-            ->join('users as d', 'd.id', 'c.user_id')
-            ->orderBy('pesanan.id', 'DESC');
-
+        // dd(1);
+        $id_pemilik = User::where(['role' => 'Pemilik', 'id' => Auth::user()->id])->first();
+        $id_penghuni = User::where(['role' => 'Penghuni', 'id' => Auth::user()->id])->first();
+        $pesanan = Pesanan::orderBy('id', 'DESC');
+        
+        if($id_pemilik)$id_pem = $id_pemilik->id;
 
         if (Auth::user()->role == 'Admin') {
             $data = $pesanan->where('via_bayar', 'midtrans')->get();
             return view('pesanan.index', compact('data'));
         }
 
+
         if (Auth::user()->role == 'Pemilik') {
 
-            if($req->dtl){
-                $data=$pesanan->where('pesanan.id', $req->dtl)->where('a.id_pemilik', $id_pemilik->id)->get();
+            if ($req->dtl) {
+                $data = $pesanan->where('id', $req->dtl)
+                               ->whereHas('kost', function ($query) use ($id_pemilik) {
+                                   $query->where('id_pemilik', $id_pemilik->id);
+                               })->get();
                 return view('pesanan.index', compact('data'));
             }
-            if($req->via){
-                $data=$pesanan->where('via_bayar', $req->via)->where('a.id_pemilik', $id_pemilik->id)->get();
+            if ($req->via) {
+                $data = Pesanan::where('via_bayar', $req->via)
+                    ->whereHas('kost', function ($query) use ($id_pem) {
+                        $query->where('id_pemilik', $id_pem);
+                    })
+                    ->get();
                 return view('pesanan.index', compact('data'));
             }
-                if($req->konfirmasi == 'menunggu'){
-                $data = $pesanan->where('a.id_pemilik', $id_pemilik->id)
-                ->where('via_bayar', 'tf-manual')
-                ->where('bukti_bayar', '!=', null)
-                ->where('pesanan.status', 'menunggu')
-                ->get();
-                return view('pesanan.index', compact('data'));
-            }
-
         }
         if (Auth::user()->role == 'Penghuni') {
-            $data = $pesanan->join('pemilik as e','e.id', 'a.id_pemilik')->where('pesanan.id_penghuni', $id_penghuni->id)->get();
+            $data = $pesanan->where('id_penghuni', $id_penghuni->id)->get();
             // dd($data);
             return view('customer.kost.pesanan', compact('data'));
         }
@@ -72,9 +62,14 @@ class PesananController extends Controller
 
         $snapToken = $req->snap;
         $data = Pesanan::findorfail($req->idd);
+
+        $geocode = new \OpenCage\Geocoder\Geocoder(env('GEOCODE_CLIENT_KEY'));
+        $result = $geocode->geocode($data->kost->lokasi);
+        $final_lokasi = $result['results'][0]['formatted'];
+
         // dd($data);
 
-        return view('customer.kost.invoice', compact('data', 'snapToken'));
+        return view('customer.kost.invoice', compact('data', 'snapToken', 'final_lokasi'));
     }
 
     public function update(Request $req, $id)
@@ -89,7 +84,7 @@ class PesananController extends Controller
                 $data->update([
                     'bukti_bayar' => $imgName,
                     'status' => 'menunggu',
-            ]);
+                ]);
             }
         }
         return redirect()->route('home.index')->with(['t' =>  'info', 'm' => 'Pembayaran berhasil. tunggu proses konfirmasi oleh pemilik']);
@@ -99,7 +94,7 @@ class PesananController extends Controller
 
 
         $data = Pesanan::where('id', $req->id);
-       $data->update(['status' => $req->status]);
+        $data->update(['status' => $req->status]);
 
 
         $kost = Kost::where('id', $req->id_kost)->first();
@@ -113,11 +108,11 @@ class PesananController extends Controller
 
         $date = $req->tgl_mulai;
 
-        $newDate = date('Y-m-d', strtotime($date. ' + ' .$req->jml_bulan . ' months'));
+        $newDate = date('Y-m-d', strtotime($date . ' + ' . $req->jml_bulan . ' months'));
 
         $kost = Kost::where('id', $req->id_kost)->first();
 
-        $penghuni = Penghuni::where('user_id', Auth::user()->id)->first();
+        $penghuni = User::where('id', Auth::user()->id)->first();
 
         $last_id = Pesanan::orderBY('id', 'DESC')->pluck('id')->first();
         $in = 'TR-';
@@ -145,7 +140,7 @@ class PesananController extends Controller
         \Midtrans\Config::$is3ds = true;
 
 
-        $user = User::join('penghuni as a', 'a.user_id', 'users.id')->where('users.id', Auth::user()->id)->first();
+        $user = User::where('id', Auth::user()->id)->first();
 
         $params = array(
             'transaction_details' => array(
@@ -181,11 +176,11 @@ class PesananController extends Controller
                 $kost = Kost::where('id', $order->id_kost)->first();
                 $kost->update(['jumlah_kamar' => $kost->jumlah_kamar - 1]);
             }
-            if ($req->transaction_status == 'pending' ) {
+            if ($req->transaction_status == 'pending') {
                 $order = Pesanan::where('kode_trx', $req->order_id)->first();
                 $order->update(['status' => 'pending']);
             }
-            if ($req->transaction_status == 'expire' ) {
+            if ($req->transaction_status == 'expire') {
                 $order = Pesanan::where('kode_trx', $req->order_id)->first();
                 $order->update(['status' => 'expire']);
             }
